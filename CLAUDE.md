@@ -1,4 +1,25 @@
-# Python Template
+# relnotes
+
+Release notes as one small file per user-visible change (`release-notes/YYYY-MM-DD-slug.md`,
+frontmatter `kind:` only). Used by every aesop tool: their release workflows run
+`uvx relnotes body <tag>`, their docs run `uvx relnotes page`, and the aesop site pulls
+`relnotes json`-shaped data (it imports `relnotes.notes.collect`).
+
+- `relnotes/notes.py`: parse, validate, find each note's release tag, render. `relnotes/cli.py`: argparse CLI.
+- `relnotes/guide.md`: the writing rules, printed by `relnotes guide`. This is the one
+  central copy; tool repos link to it, never copy it. Changing it changes what every
+  agent writes, so keep it short and concrete.
+- **No runtime dependencies** (stdlib, argparse instead of typer, an exception to
+  docs/standards): it runs via `uvx` in many repos' CI and must stay quick.
+- A release's version comes from git: first `v*` tag containing the commit that added the
+  note (`git log --diff-filter=A --no-renames` + `git tag --contains`). CI needs
+  `fetch-depth: 0`.
+- Release: tag `vX.Y.Z` → `.github/workflows/release.yml` → PyPI (trusted publishing,
+  environment `pypi`) + GitHub release built by this repo's own `relnotes body`.
+
+## Release notes
+
+A user-visible change adds a note in `release-notes/`. Run `uv run relnotes guide` before writing one.
 
 ## Commands
 
@@ -81,24 +102,6 @@ uv lock --refresh --upgrade-package madoqua --upgrade-package gerenuk --upgrade-
 
 `--refresh` matters: without it uv may serve a cached index and miss a release
 published minutes ago.
-
-## New project from this template
-
-When starting a new project from this template, set up a GitHub Actions CI pipeline
-(`.github/workflows/ci.yml`) that runs `uv sync` and `uv run poe check` on push and pull
-request.
-
-**Use the newest version of every action.** Versions remembered from training data are
-usually outdated, so look each one up before writing it:
-`gh release view --repo <owner/repo>` (or the latest-release / list-tags tool from the
-GitHub integration). This covers at least `actions/checkout` and `astral-sh/setup-uv`.
-
-Then check that the tag you write exists: `gh api repos/<owner/repo>/git/ref/tags/<tag>`.
-Use the major tag (`@v7`) if it exists, otherwise the full version. Not every action
-publishes major tags: `setup-uv` doesn't, so `@v10` fails with "unable to find version"
-and it needs e.g. `@v10.3.3`.
-Use `setup-uv` to install uv and Python instead of `actions/setup-python`, and turn on its
-cache. Don't copy version tags from older workflows or from memory.
 
 ## Notes
 
