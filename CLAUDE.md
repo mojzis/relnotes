@@ -2,7 +2,7 @@
 
 Release notes as one small file per user-visible change (`release-notes/YYYY-MM-DD-slug.md`,
 frontmatter `kind:` only). Used by every aesop tool: their release workflows run
-`uvx relnotes body <tag>`, their docs run `uvx relnotes page`, and the aesop site pulls
+`relnotes body <tag>` (run from GitHub via uvx), their docs run `relnotes page`, and the aesop site pulls
 `relnotes json`-shaped data (it imports `relnotes.notes.collect`).
 
 - `relnotes/notes.py`: parse, validate, find each note's release tag, render. `relnotes/cli.py`: argparse CLI.
