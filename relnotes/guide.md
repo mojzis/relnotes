@@ -40,7 +40,7 @@ kind: fixed
   the release tag. Don't write any of them in the note.
 - The body is one or two sentences, at most 400 characters. No headings, no
   lists.
-- `uvx relnotes@latest check` validates every note.
+- `uvx --from git+https://github.com/mojzis/relnotes relnotes check` validates every note.
 
 ## How to write the body
 

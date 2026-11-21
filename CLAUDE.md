@@ -14,8 +14,10 @@ frontmatter `kind:` only). Used by every aesop tool: their release workflows run
 - A release's version comes from git: first `v*` tag containing the commit that added the
   note (`git log --diff-filter=A --no-renames` + `git tag --contains`). CI needs
   `fetch-depth: 0`.
-- Release: tag `vX.Y.Z` → `.github/workflows/release.yml` → PyPI (trusted publishing,
-  environment `pypi`) + GitHub release built by this repo's own `relnotes body`.
+- Not on PyPI: everyone runs it from GitHub (`uvx --from git+https://github.com/mojzis/relnotes relnotes`),
+  so whatever lands on main is live in every tool's next CI run. Keep main working.
+- Release: tag `vX.Y.Z` → `.github/workflows/release.yml` → GitHub release (built by this
+  repo's own `relnotes body`); tags exist so a repo can pin `...relnotes@vX.Y.Z`.
 
 ## Release notes
 
